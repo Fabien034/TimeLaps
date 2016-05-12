@@ -1,4 +1,4 @@
-# !/usr/bin/env python
+﻿# !/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 # Copyright: Fabien Rosso
@@ -54,7 +54,7 @@ def main():
 
     # inscription des class
     camera = GPhoto(subprocess)
-
+    
     timeLapsStart = False
 
     while timeLapsStart == False:
