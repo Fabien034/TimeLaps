@@ -1,18 +1,53 @@
-﻿# TimeLaps
-Projet TimeLaps sur Rpi
+TimeLaps sur Raspberry
+======================
 
-Prise de vue toutes les x secondes sur une plage horaires defini par le fichier config et transfert des photo vers un serveur
+** En cours de dévellopement **
 
-Executer le script fichierConfig.py pour les reglages
-Executer le script TimeLaps.py pour lancer la prise de vue
-Executer le script TransfertFichier.py pour lancer le transfer vers le serveur
+Objectif du projet
+------------------
 
-Controle de l'APN via subprocess Gphoto: Attention RPi doit être configurer en français (raspi-config)
+Prise de vue sur toutes les x secondes sur une plage horaires et période definie
+Transfert des Photos de l'APN vers le Rpi
+Transfert des photographies vers un serveur distant
+Monitoring depuis une console en SSH
 
-L'APN doit etre en mode semi-automatique et la MAP faite manuellement
+Installation
+------------
+* **Dépendances**
 
-Fichier à suprimer pour l'utilisation de gphoto et redemarrer le rpi
-	sudo rm /usr/share/dbus-1/services/org.gtk.Private.GPhoto2VolumeMonitor.service
-	sudo rm /usr/share/gvfs/mounts/gphoto2.mount
-	sudo rm /usr/share/gvfs/remote-volume-monitors/gphoto2.monitor
-	sudo rm /usr/lib/gvfs/gvfs-gphoto2-volume-monitor
+	::
+		
+		sudo apt-get install openssh-server tmux gphoto2 git
+		sudo Pip install exifread
+
+	(si vous ne disposé pas de Pip, vous le trouverez ici: `pip <http://pypi.python.org/pypi/pip>`_)
+	
+	Controle de l'APN via subprocess Gphoto: Attention RPi doit être configurer en français (raspi-config)
+	
+	** Fichier à suprimer pour l'utilisation de gphoto **
+	
+	::
+	
+		sudo rm /usr/share/dbus-1/services/org.gtk.Private.GPhoto2VolumeMonitor.service
+		sudo rm /usr/share/gvfs/mounts/gphoto2.mount
+		sudo rm /usr/share/gvfs/remote-volume-monitors/gphoto2.monitor
+		sudo rm /usr/lib/gvfs/gvfs-gphoto2-volume-monitor
+		
+	Redémarrer le Rpi
+	
+Fonctionnement
+--------------
+
+Sur le serveur:
+	- Executer le script ''~/TimeLaps/server.sh''
+
+Sur le Rpi:
+	- Configurer le Timelaps en executant le fichier ''~/TimeLaps/FichierConfig.py''
+	- Executer le script ''~/TimeLaps/Timelaps.py'' pour lancer le Timelaps
+
+Sources
+-------
+
+Gphoto2: 'Gphoto2 <http://gphoto.sourceforge.net/>'	
+Tmux: `Tmux <https://tmux.github.io/>`
+Raspberry Pi Timelapse Controller: 'David singleton <http://blog.davidsingleton.org/raspberry-pi-timelapse-controller/>'
