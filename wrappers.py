@@ -84,7 +84,7 @@ class GPhoto(Wrapper):
         return filename
 
 
-class Photo:
+class Photo():
     """Class definissant une photo caracterisee par:
     - Chemin (self.pathFile)
     - son nom (self.namefile)
@@ -145,6 +145,53 @@ class Scp(Wrapper):
         if code != 0:
             raise Exception(err)
         return out
+
+class Tmux(Wrapper):
+    """ A class which wraps calls to the external tmux process. """
+
+    def __init__(self, subprocess):
+        Wrapper.__init__(self, subprocess)
+        self._CMD = 'tmux'
+        self.session = os.environ["USER"]
+        code, out, err = self.call(self._CMD + " -2 new-session -d -s " + self.session)
+        if code != 0:
+            raise Exception(err)
+
+    def newWindows(self, nameWindows):
+        code, out, err = self.call(self._CMD + " new-window -t " + self.session + ":1 -n '" + nameWindows + "'")
+        if code != 0:
+            raise Exception(err)
+    
+    def sendKeys(self, keys):
+        code, out, err = self.call(self._CMD + " send-keys '" +  keys + "' C-m")
+        if code != 0:
+            raise Exception(err)
+
+    def splitWindows(self, split):
+        """ split = v pour vertical
+            split = h pour horizontal """
+        code, out, err = self.call(self._CMD + " split-window -" + split)
+        if code != 0:
+            raise Exception(err)
+
+    def resizePane(self, prefixe, nb):
+        """ prefixe = D (Resizes the current pane down)
+            prefixe = U (Resizes the current pane upward)
+            prefixe = L (Resizes the current pane left)
+            prefixe = R (Resizes the current pane right) """
+        code, out, err = self.call(self._CMD + " resize-pane -" + prefixe + " " + nb)
+        if code != 0:
+            raise Exception(err)
+
+    def selectPane(self, nb):
+        code, out, err = self.call(self._CMD + " select-pane -t " + nb)
+        if code != 0:
+            raise Exception(err)
+
+    def attachSession(self):
+        code, out, err = self.call(self._CMD + " -2 attach-session -t " + self.session)
+        if code != 0:
+            raise Exception(err)
 
 
 def ListDirectory(path):
