@@ -18,7 +18,7 @@ Installation
 		sudo apt-get install openssh-server tmux gphoto2 git
 		sudo Pip install exifread
 
-	si vous ne disposé pas de Pip, vous le trouverez ici: `pip <http://pypi.python.org/pypi/pip>`
+	si vous ne disposé pas de Pip, vous le trouverez ici: <http://pypi.python.org/pypi/pip>
 	
 	Controle de l'APN via subprocess Gphoto: Attention RPi doit être configurer en français (raspi-config)
 	
@@ -29,7 +29,7 @@ Installation
 		sudo rm /usr/share/gvfs/remote-volume-monitors/gphoto2.monitor
 		sudo rm /usr/lib/gvfs/gvfs-gphoto2-volume-monitor
 		
-		Redémarrer le Rpi
+	Redémarrer le Rpi
 	
 Fonctionnement
 --------------
@@ -47,6 +47,6 @@ Voir: `<http://jeyg.info/ssh-authentification-par-cles-rsa-ou-dsa/>`
 Sources
 -------
 
-Gphoto2: `<http://gphoto.sourceforge.net/>`
-Tmux: `<https://tmux.github.io/>`
-David singleton: `<http://blog.davidsingleton.org/raspberry-pi-timelapse-controller/>`
+Gphoto2: <http://gphoto.sourceforge.net/>
+Tmux: <https://tmux.github.io/>
+David singleton: <http://blog.davidsingleton.org/raspberry-pi-timelapse-controller/>
