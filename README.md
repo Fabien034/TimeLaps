@@ -29,7 +29,7 @@ Installation
 		sudo rm /usr/share/gvfs/remote-volume-monitors/gphoto2.monitor
 		sudo rm /usr/lib/gvfs/gvfs-gphoto2-volume-monitor
 		
-	Redémarrer le Rpi
+		Redémarrer le Rpi
 	
 Fonctionnement
 --------------
@@ -38,15 +38,15 @@ Sur le serveur:
 	- Executer le script '~/TimeLaps/server.sh'
 
 Sur le Rpi:
-	- Configurer le Timelaps en executant le fichier "~/TimeLaps/FichierConfig.py"
+	- Configurer le Timelaps en executant le fichier `~/TimeLaps/FichierConfig.py`
 	- Executer le script "~/TimeLaps/Timelaps.py" pour lancer le Timelaps
 
 **L'authetification clef RSA**
-Voir: '<http://jeyg.info/ssh-authentification-par-cles-rsa-ou-dsa/>'
+Voir: `<http://jeyg.info/ssh-authentification-par-cles-rsa-ou-dsa/>`
 
 Sources
 -------
 
-Gphoto2: "<http://gphoto.sourceforge.net/>"
-Tmux: "<https://tmux.github.io/>"
-David singleton: "<http://blog.davidsingleton.org/raspberry-pi-timelapse-controller/>"
+Gphoto2: `<http://gphoto.sourceforge.net/>`
+Tmux: `<https://tmux.github.io/>`
+David singleton: `<http://blog.davidsingleton.org/raspberry-pi-timelapse-controller/>`
