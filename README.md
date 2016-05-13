@@ -38,15 +38,15 @@ Sur le serveur:
 	- Executer le script '~/TimeLaps/server.sh'
 
 Sur le Rpi:
-	- Configurer le Timelaps en executant le fichier '~/TimeLaps/FichierConfig.py'
-	- Executer le script '~/TimeLaps/Timelaps.py' pour lancer le Timelaps
+	- Configurer le Timelaps en executant le fichier "~/TimeLaps/FichierConfig.py"
+	- Executer le script "~/TimeLaps/Timelaps.py" pour lancer le Timelaps
 
-**L'authetification pat clef RSA**
+**L'authetification clef RSA**
 Voir: '<http://jeyg.info/ssh-authentification-par-cles-rsa-ou-dsa/>'
 
 Sources
 -------
 
-Gphoto2: '<http://gphoto.sourceforge.net/>'
-Tmux: '<https://tmux.github.io/>'
-David singleton: '<http://blog.davidsingleton.org/raspberry-pi-timelapse-controller/>'
+Gphoto2: "<http://gphoto.sourceforge.net/>"
+Tmux: "<https://tmux.github.io/>"
+David singleton: "<http://blog.davidsingleton.org/raspberry-pi-timelapse-controller/>"
