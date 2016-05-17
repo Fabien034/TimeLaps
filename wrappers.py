@@ -8,7 +8,6 @@
 
 
 
-
 from __future__ import unicode_literals
 from __future__ import print_function
 
@@ -133,14 +132,14 @@ class Scp(Wrapper):
             configRead = pickle.Unpickler(fichierConfig)
             self.host = configRead.load()
             self.port = int(configRead.load())
+            self.user = configRead.load()
+            self.portSsh = int(configRead.load())
 
-        self.portSsh = "525"
-
-    def send(self, file, user, fileDestination):
+    def send(self, file, fileDestination):
         code, out, err = self.call(self._CMD +
                                    " -P " + self.portSsh +
                                    " -p " + file + " " +
-                                   user + "@" + self.host + ":" +
+                                   self.user + "@" + self.host + ":" +
                                    fileDestination)
         if code != 0:
             raise Exception(err)

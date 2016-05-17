@@ -21,8 +21,8 @@ from time import sleep
 
 from wrappers import *
 
-import ptvsd
-ptvsd.enable_attach(None)
+# import ptvsd
+# ptvsd.enable_attach(None)
 
 os.system("clear")
 
@@ -85,7 +85,6 @@ def main():
                                                .format(datetimeShot.strftime
                                                        ("%y%m%d-%H%M%S"),
                                                        file.extFile)))
-
                 # Deplace/rennome la photo
                 file = file.move(newPathFile)
                 print("Fichier '{0}' transferer vers '{1}'"

@@ -99,9 +99,9 @@ def main():
                 mySocket.send(message_emis.decode(encoding='UTF-8'))
             except:
                 break
-            print("Evnoi de la photo {0}".format(file.nameFile))
+            print("Envoi de la photo {0}".format(file.nameFile))
             scp = Scp(subprocess)
-            scp.send(file.pathFile, USER, fileDestination)
+            scp.send(file.pathFile, fileDestination)
             print("Envoi OK")
 
             message_emis = b"Fichier {0} transfere".format(file.nameFile)

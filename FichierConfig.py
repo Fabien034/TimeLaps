@@ -25,11 +25,13 @@ interShotDelaySec = float(raw_input("Entrez l'intervalle entre les photos (minut
 host = raw_input("Entrez l'ip du serveur (77.147.64.38): ")
 if host == "":
     host = "77.147.64.38"
+port = 50100
+portSsh = raw_input("Entrez le port de connection ssh: ")
+if user == "":
+    portSsh = 525
 user = raw_input("Entrez le nom de l'utilisateur sur le serveur (spm) : ")
 if user == "":
     user = "spm"
-port = 50100
-portSsh = 525
 
 dateStart = datetime(dateStart[2],dateStart[1],dateStart[0],timleSlotMini[0],timleSlotMini[1])
 dateStop = datetime(dateStop[2],dateStop[1],dateStop[0],timleSlotMaxi[0],timleSlotMaxi[1])
