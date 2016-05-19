@@ -12,11 +12,13 @@ from __future__ import print_function
 
 import socket, sys, threading, time, os
 
-# adresse IP et port utilis?s par le serveur
+# adresse IP et port utilises par le serveur
 HOST = ""
 PORT = 50100
 
+serveurLance = True
 dictClient = {}  # dictionnaire des connexions clients
+
 
 class ThreadClient(threading.Thread):
     '''derivation de classe pour gerer la connexion avec un client'''
@@ -40,24 +42,30 @@ class ThreadClient(threading.Thread):
             try:
                 # attente réponse client
                 MessageRecu = self.connexion.recv(4096)
-                MessageRecu = MessageRecu.decode(encoding='UTF-8')
+                if MessageRecu:
+                    MessageRecu = MessageRecu.decode(encoding='UTF-8')
+                    print("message du client",self.nom,">",MessageRecu)
+                    TraitementMessage(self.nom, MessageRecu)
             except:
                 # fin du thread
-                break
-            
-            print("message du client",self.nom,">",MessageRecu)
+                print ("Client (%s, %s) is offline" % infos_connexion)
+                self.connexion.close()
+                dictClient.remove(self.connexion)
+                continue 
             
             # on traite les messages recu
-            TraitementMessage(self.nom, MessageRecu)
+            
 
         print("\nFin du thread",self.nom)
         self.connexion.close()
+
 
 def TraitementMessage (Client, Message):
     """ Traitement du message recu """  
     if Message.split(" ")[0] == "makedirs":
         if not os.path.exists(Message.split(" ")[1]):
             os.makedirs(Message.split(" ")[1], mode=0o777)
+
 
 def main():    
     # Initialisation du serveur
@@ -69,10 +77,10 @@ def main():
     except socket.error:
         print("La liaison du socket a l'adresse choisie a echoue.")
         sys.exit()
-    print("Serveur pret (port",PORT,") en attente de clients...")
 
-
-    while True:
+    print("Le serveur écoute à présent sur le port {}".format(PORT))
+    
+    while serveurLance:
         mySocket.listen(5)
         try:
             connexion, adresse = mySocket.accept()
@@ -86,12 +94,21 @@ def main():
 
 
     # fermeture des sockets
-    for client in dict_clients:
-        dict_clients[client].close()
+    for client in dictClient:
+        dictClient[client].close()
         print("Deconnexion du socket", client)
 
     input("\nAppuyer sur Entree pour quitter l'application...\n")
     # fermeture des threads (daemon) et de l'application
 
+
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        print("Programme interrompu par l'utilisateur")
+        if dictClient:
+            for client in dictClient:
+                dictClient[client].close()
+                print("Deconnexion du socket", client)
+        sys.exit()

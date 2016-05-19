@@ -131,13 +131,13 @@ class Scp(Wrapper):
         with open("configServer", "rb") as fichierConfig:
             configRead = pickle.Unpickler(fichierConfig)
             self.host = configRead.load()
-            self.port = int(configRead.load())
+            self.port = configRead.load()
             self.user = configRead.load()
-            self.portSsh = int(configRead.load())
+            self.portSsh = configRead.load()
 
     def send(self, file, fileDestination):
         code, out, err = self.call(self._CMD +
-                                   " -P " + self.portSsh +
+                                   " -P " + str(self.portSsh) +
                                    " -p " + file + " " +
                                    self.user + "@" + self.host + ":" +
                                    fileDestination)
