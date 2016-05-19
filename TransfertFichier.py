@@ -6,6 +6,9 @@
 # Version 0.1.1 - 19 Avril 2016
 # Version 0.1.2 - 29 Avril 2016
 
+## Debug VisualStudio
+# import ptvsd
+# ptvsd.enable_attach(None)
 
 from __future__ import unicode_literals
 from __future__ import print_function
@@ -82,7 +85,8 @@ def main():
 
         if len(listFile) > 0:
             file = Photo(listFile[0])
-            datePath = datetime.now().date().strftime("%Y/%y.%m.%d/")
+            print(file.createDate)
+            datePath = time.strftime("%Y/%y.%m.%d/",file.createDate)
             pathDestination = os.path.join(HOMESERVER,datePath)
             fileDestination = os.path.join(pathDestination,file.nameFile)
 
@@ -90,6 +94,7 @@ def main():
             try:
                 # emission
                 mySocket.send(message_emis.decode(encoding='UTF-8'))
+                time.sleep(0.1)
             except:
                 break
 
@@ -97,17 +102,20 @@ def main():
             try:
                 # emission
                 mySocket.send(message_emis.decode(encoding='UTF-8'))
+                time.sleep(0.1)
             except:
                 break
             print("Envoi de la photo {0}".format(file.nameFile))
             scp = Scp(subprocess)
             scp.send(file.pathFile, fileDestination)
+            time.sleep(0.01)
             print("Envoi OK")
 
             message_emis = b"Fichier {0} transfere".format(file.nameFile)
             try:
                 # emission
                 mySocket.send(message_emis.decode(encoding='UTF-8'))
+                time.sleep(0.1)
             except:
                 break
 
@@ -123,6 +131,7 @@ def main():
             try:
                 # emission
                 mySocket.send(message_emis.decode(encoding='UTF-8'))
+                time.sleep(0.1)
             except:
                 break
 
@@ -134,5 +143,5 @@ if __name__ == "__main__":
         main()
     except KeyboardInterrupt:
         print("/nProgramme interrompu par l'utilisateur")
-        sys.exit()
+        sys.exit(0)
 

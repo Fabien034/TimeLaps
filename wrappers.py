@@ -18,7 +18,7 @@ import exifread
 import shutil
 import pickle
 import subprocess
-
+import time 
 
 class Wrapper(object):
 
@@ -100,6 +100,7 @@ class Photo():
         self.nameFile = os.path.split(self.pathFile)[1]
         self.extFile = os.path.splitext(self.pathFile)[1]
         self.parenPathFile = os.path.split(self.pathFile)[0]
+        self.createDate = time.gmtime(os.path.getatime(self.pathFile))
 
     def tag_date_time(self):
         """ Recupere la date de prise de vue dans les exif avec la lib exifread
