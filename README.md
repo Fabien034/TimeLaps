@@ -1,5 +1,5 @@
-TimeLaps sur Raspberry
-======================
+TimeLapse sur Raspberry
+=======================
 
 **En cours de dévellopement**
 
