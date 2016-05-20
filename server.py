@@ -1,4 +1,4 @@
-﻿# !/usr/bin/env python
+# !/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 # Copyright: Fabien Rosso
@@ -32,7 +32,7 @@ class ThreadClient(threading.Thread):
         self.nom = self.getName() # identifiant du thread "<Thread-N>"
         dictClient[self.nom] = self.connexion
         print("Connexion du client", self.connexion.getpeername(),self.nom ,self.connexion)        
-        message = "Vous etes connecte au serveur.\n"
+        message = " >> Vous etes connecte au serveur.\n"
         self.connexion.send(message.decode(encoding='UTF-8'))        
         
     def run(self):
@@ -65,6 +65,7 @@ def TraitementMessage (Client, Message):
     if Message.split(" ")[0] == "makedirs":
         if not os.path.exists(Message.split(" ")[1]):
             os.makedirs(Message.split(" ")[1], mode=0o777)
+            print(" >> Dossier {0} Créé".format(Message.split(" ")[1]))
 
 
 def main():    
@@ -75,10 +76,10 @@ def main():
     try:
         mySocket.bind((HOST, PORT))
     except socket.error:
-        print("La liaison du socket a l'adresse choisie a echoue.")
+        print(" >> La liaison du socket a l'adresse choisie a echoue.")
         sys.exit()
 
-    print("Le serveur écoute à présent sur le port {}".format(PORT))
+    print(" >> Le serveur écoute à présent sur le port {}".format(PORT))
     
     while serveurLance:
         mySocket.listen(5)

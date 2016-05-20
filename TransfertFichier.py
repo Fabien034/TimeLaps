@@ -37,7 +37,7 @@ class ThreadReception(threading.Thread):
     def run(self):
         while True:
             try:
-                # en attente de r?ception
+                # en attente de reception
                 message_recu = self.connexion.recv(4096)
                 message_recu = message_recu.encode(encoding='UTF-8')
                 print(message_recu)
@@ -58,6 +58,7 @@ def main():
         HOST = configRead.load()
         PORT = int(configRead.load())
         USER = configRead.load()
+        PORTSSH = int(configRead.load())
 
     HOMESERVER = os.path.join("/home",USER,"Images")
     # Création du dossier attente de tranfert
@@ -67,13 +68,13 @@ def main():
 
     # Etablissement de la connexion avec le serveur
     # protocoles IPv4 et TCP
-    print("Connection au serveur")
     mySocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     mySocket.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
+    print(" >> Connexion en cours avec " + HOST + "...")
     try:
         mySocket.connect((HOST, PORT))
     except socket.error:
-        print("La connexion a echoue.")
+        print(" >> le serveur '" + host + "' est introuvable.")
         sys.exit()
 
     # Dialogue avec le serveur : threads pour gerer la reception des messages
@@ -85,7 +86,12 @@ def main():
 
         if len(listFile) > 0:
             file = Photo(listFile[0])
-            print(file.createDate)
+
+            octets = os.path.getsize(file.pathFile) / 1024
+
+            print(" >> OK : '" + file.nameFile + "' [" + str(octets) + " Ko]")
+            print("")
+
             datePath = time.strftime("%Y/%y.%m.%d/",file.createDate)
             pathDestination = os.path.join(HOMESERVER,datePath)
             fileDestination = os.path.join(pathDestination,file.nameFile)
@@ -105,19 +111,12 @@ def main():
                 time.sleep(0.1)
             except:
                 break
-            print("Envoi de la photo {0}".format(file.nameFile))
-            scp = Scp(subprocess)
-            scp.send(file.pathFile, fileDestination)
-            time.sleep(0.01)
-            print("Envoi OK")
+            print(" >> Envoi de la photo '{0}'".format(file.nameFile))
 
-            message_emis = b"Fichier {0} transfere".format(file.nameFile)
-            try:
-                # emission
-                mySocket.send(message_emis.decode(encoding='UTF-8'))
-                time.sleep(0.1)
-            except:
-                break
+            subprocess.call(["scp", "-P", bytes(PORTSSH), "-p", file.pathFile ,"{0}@{1}:{2}".format(USER, bytes(HOST), fileDestination)])
+
+            time.sleep(0.01)
+            print(" >> Envoi OK")
 
             # Création du dossier Date dans le répertoire de travail
             sourcePath = os.path.join(os.path.expanduser("~"),"Pictures",datePath)
@@ -127,13 +126,8 @@ def main():
             newPathFile = os.path.join(sourcePath,file.nameFile)
             # Deplace/rennome la photo
             file = file.move(newPathFile)
-            message_emis = "Fichier '{0}' transferer vers '{1}'".format(file.nameFile, file.parenPathFile)
-            try:
-                # emission
-                mySocket.send(message_emis.decode(encoding='UTF-8'))
-                time.sleep(0.1)
-            except:
-                break
+            print(" >> Fichier '{0}' déplacé vers '{1}'".format(file.nameFile, file.parenPathFile))
+
 
     mySocket.close()
     print("envoi des photos termine")

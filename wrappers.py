@@ -14,7 +14,7 @@ from __future__ import print_function
 
 import re
 import os
-import exifread
+#import exifread
 import shutil
 import pickle
 import subprocess
@@ -102,49 +102,24 @@ class Photo():
         self.parenPathFile = os.path.split(self.pathFile)[0]
         self.createDate = time.gmtime(os.path.getatime(self.pathFile))
 
-    def tag_date_time(self):
-        """ Recupere la date de prise de vue dans les exif avec la lib exifread
-        N'est plus utilise dans la V0.1.1.1"""
-        # Lecture des Exif
-        with open(self.pathFile, "rb") as f:
-            tags = exifread.process_file(f)
-        # Recupere la date de prise de vue
-        try:
-            tagsDateTime = tags['Image DateTime'].values
-        except Exception, e:
-            print("Erreur: ") + str(e)
-        return tagsDateTime
+    #def tag_date_time(self):
+    #    """ Recupere la date de prise de vue dans les exif avec la lib exifread
+    #    N'est plus utilise dans la V0.1.1.1"""
+    #    # Lecture des Exif
+    #    with open(self.pathFile, "rb") as f:
+    #        tags = exifread.process_file(f)
+    #    # Recupere la date de prise de vue
+    #    try:
+    #        tagsDateTime = tags['Image DateTime'].values
+    #    except Exception, e:
+    #        print("Erreur: ") + str(e)
+    #    return tagsDateTime
 
     def move(self, newPath):
         """Deplace/Renome la photo dans un repertoire newPath"""
         shutil.move(self.pathFile, newPath)
         file = Photo(newPath)
         return file
-
-
-class Scp(Wrapper):
-    """ A class which wraps calls to the external scp process. """
-
-    def __init__(self, subprocess):
-        Wrapper.__init__(self, subprocess)
-        self._CMD = 'scp'
-
-        with open("configServer", "rb") as fichierConfig:
-            configRead = pickle.Unpickler(fichierConfig)
-            self.host = configRead.load()
-            self.port = configRead.load()
-            self.user = configRead.load()
-            self.portSsh = configRead.load()
-
-    def send(self, file, fileDestination):
-        code, out, err = self.call(self._CMD +
-                                   " -P " + str(self.portSsh) +
-                                   " -p " + file + " " +
-                                   self.user + "@" + self.host + ":" +
-                                   fileDestination)
-        if code != 0:
-            raise Exception(err)
-        return out
 
 class Tmux(Wrapper):
     """ A class which wraps calls to the external tmux process. """
