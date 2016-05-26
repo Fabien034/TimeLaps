@@ -36,11 +36,11 @@ Fonctionnement
 --------------
 
 Sur le serveur:
-	- Executer le script '~/TimeLaps/server.sh'
+	- Executer le script `python ~/TimeLaps/server.sh`
 
 Sur le Rpi:
-	- Configurer le Timelaps en executant le fichier `~/TimeLaps/FichierConfig.py`
-	- Executer le script "~/TimeLaps/Timelaps.py" pour lancer le Timelaps
+	- Configurer le Timelaps en executant le fichier `python ~/TimeLaps/FichierConfig.py`
+	- Executer le script `python ~/TimeLaps/Timelaps.py` pour lancer le Timelaps
 
 **L'authetification clef RSA**
 
