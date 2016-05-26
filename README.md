@@ -16,7 +16,8 @@ Installation
 * **Dépendances**
 
 		sudo apt-get install openssh-server tmux gphoto2 git
-		sudo Pip install exifread
+		sudo pip install exifread
+		sudo pip install psutil
 
 	si vous ne disposé pas de Pip, vous le trouverez ici: <http://pypi.python.org/pypi/pip>
 	
