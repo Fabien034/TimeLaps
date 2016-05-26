@@ -6,6 +6,10 @@
 # Version 0.1.1 - 19 Avril 2016
 # Version 0.1.2 - 29 Avril 2016
 
+## Debug VisualStudio
+# import ptvsd
+# ptvsd.enable_attach(None)
+
 
 from __future__ import unicode_literals
 from __future__ import print_function
@@ -20,9 +24,7 @@ import time
 from time import sleep
 
 from wrappers import *
-
-# import ptvsd
-# ptvsd.enable_attach(None)
+from fonctions import *
 
 os.system("clear")
 

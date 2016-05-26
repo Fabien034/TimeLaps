@@ -24,6 +24,7 @@ from datetime import datetime
 from time import sleep
 
 from wrappers import *
+from fonctions import *
 
 os.system("clear")
 
