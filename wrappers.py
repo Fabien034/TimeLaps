@@ -20,6 +20,7 @@ import pickle
 import subprocess
 import time 
 
+
 class Wrapper(object):
 
     def __init__(self, subprocess):
@@ -167,15 +168,3 @@ class Tmux(Wrapper):
         code, out, err = self.call(self._CMD + " -2 attach-session -t " + self.session)
         if code != 0:
             raise Exception(err)
-
-
-def ListDirectory(path):
-    ''' Fonction listdirectory(path)
-    Fait une liste de tous les fichiers dans le repertoire 'path'
-    et des sous repertoires
-    '''
-    fichier=[]
-    for root, dirs, files in os.walk(path):
-        for i in files:
-            fichier.append(os.path.join(root, i))
-    return fichier
