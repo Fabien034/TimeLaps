@@ -26,6 +26,9 @@ from time import sleep
 from wrappers import *
 from fonctions import *
 
+import logging 
+from logging.handlers import RotatingFileHandler
+
 os.system("clear")
 
 
@@ -51,6 +54,29 @@ class ThreadReception(threading.Thread):
 
 
 def main():
+    # création de l'objet logger qui va nous servir à écrire dans les logs
+    logger = logging.getLogger()
+    # on met le niveau du logger à DEBUG, comme ça il écrit tout
+    logger.setLevel(logging.DEBUG)
+ 
+    # création d'un formateur qui va ajouter le temps, le niveau
+    # de chaque message quand on écrira un message dans le log
+    formatter = logging.Formatter('%(asctime)s :: %(levelname)s :: %(message)s')
+    # création d'un handler qui va rediriger une écriture du log vers
+    # un fichier en mode 'append', avec 1 backup et une taille max de 1Mo
+    file_handler = RotatingFileHandler('activity_transfert_fichier.log', 'a', 1000000, 1)
+    # on lui met le niveau sur DEBUG, on lui dit qu'il doit utiliser le formateur
+    # créé précédement et on ajoute ce handler au logger
+    file_handler.setLevel(logging.DEBUG)
+    file_handler.setFormatter(formatter)
+    logger.addHandler(file_handler)
+ 
+    # création d'un second handler qui va rediriger chaque écriture de log
+    # sur la console
+    steam_handler = logging.StreamHandler()
+    steam_handler.setLevel(logging.DEBUG)
+    logger.addHandler(steam_handler)
+
     raw_input("Appuyer sur une touche pour demarrer l'envoi des photos")
 
     os.system("clear")
@@ -73,11 +99,11 @@ def main():
     # protocoles IPv4 et TCP
     mySocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     mySocket.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
-    print(" >> Connexion en cours avec " + HOST + "...")
+    logger.info(" >> Connexion en cours avec " + HOST + "...")
     try:
         mySocket.connect((HOST, PORT))
     except socket.error:
-        print(" >> le serveur '" + host + "' est introuvable.")
+        logger.warning(" >> le serveur '" + host + "' est introuvable.")
         sys.exit()
 
     # Dialogue avec le serveur : threads pour gerer la reception des messages
@@ -90,7 +116,7 @@ def main():
         if len(listFile) > 0:
             file = Photo(listFile[0]) # Création de la class photo
             octets = os.path.getsize(file.pathFile) / 1024 # Nombre d'octets de la photo
-            print(" >> OK : '" + file.nameFile + "' [" + str(octets) + " Ko]")
+            logger.info(" >> Transfert : '" + file.nameFile + "' [" + str(octets) + " Ko]")
             
             # on crée le chemin du fichier pour le serveur suivant la date de création
             datePath = time.strftime("%Y/%y.%m.%d/",file.createDate)
@@ -114,13 +140,13 @@ def main():
                 time.sleep(0.1)
             except:
                 break
-            print(" >> Envoi de la photo '{0}'".format(file.nameFile))
+            logger.info(" >> Envoi de la photo '{0}'".format(file.nameFile))
 
             # subprocess SCP pour l'envoie de la photo
             subprocess.call(["scp", "-P", bytes(PORTSSH), "-p", file.pathFile ,"{0}@{1}:{2}".format(USER, bytes(HOST), fileDestination)])
 
             time.sleep(0.01)
-            print(" >> Envoi OK")
+            logger.info(" >> Envoi OK")
             
             # on crée le chemin du fichier pour le rangement sur le RPi suivant la date de création
             # si il n'existe pas on crée le dossier
@@ -131,17 +157,17 @@ def main():
             newPathFile = os.path.join(sourcePath,file.nameFile)
             # Deplace/rennome la photo
             file = file.move(newPathFile)
-            print(" >> Fichier '{0}' déplacé vers '{1}'".format(file.nameFile, file.parenPathFile))
+            logger.info(" >> Fichier '{0}' déplacé vers '{1}'".format(file.nameFile, file.parenPathFile))
             print("")
 
 
     mySocket.close()
-    print(" >> envoi des photos termine")
+    logger.info(" >> envoi des photos termine")
 
 if __name__ == "__main__":
     try:
         main()
     except KeyboardInterrupt:
-        print("Programme interrompu par l'utilisateur")
+        logger.warning("Programme interrompu par l'utilisateur")
         sys.exit(0)
 

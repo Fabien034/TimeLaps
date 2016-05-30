@@ -26,10 +26,36 @@ from time import sleep
 from wrappers import *
 from fonctions import *
 
+import logging
+from logging.handlers import RotatingFileHandler
+
 os.system("clear")
 
 
 def main():
+
+    # création de l'objet logger qui va nous servir à écrire dans les logs
+    logger = logging.getLogger()
+    # on met le niveau du logger à DEBUG, comme ça il écrit tout
+    logger.setLevel(logging.DEBUG)
+ 
+    # création d'un formateur qui va ajouter le temps, le niveau
+    # de chaque message quand on écrira un message dans le log
+    formatter = logging.Formatter('%(asctime)s :: %(levelname)s :: %(message)s')
+    # création d'un handler qui va rediriger une écriture du log vers
+    # un fichier en mode 'append', avec 1 backup et une taille max de 1Mo
+    file_handler = RotatingFileHandler('activity_capture_photo.log', 'a', 1000000, 1)
+    # on lui met le niveau sur DEBUG, on lui dit qu'il doit utiliser le formateur
+    # créé précédement et on ajoute ce handler au logger
+    file_handler.setLevel(logging.DEBUG)
+    file_handler.setFormatter(formatter)
+    logger.addHandler(file_handler)
+ 
+    # création d'un second handler qui va rediriger chaque écriture de log
+    # sur la console
+    steam_handler = logging.StreamHandler()
+    steam_handler.setLevel(logging.DEBUG)
+    logger.addHandler(steam_handler)
 
     raw_input("Appuyer sur une touche pour demarrer le TimeLaps")
     print("---------")
@@ -70,9 +96,9 @@ def main():
                     timeScriptShot = time.time()
                     datetimeShot = datetime.now()
                     fileName = camera.capture_image_and_download()
-                    print("Photo {0} prise".format(fileName))
+                    logger.info("Photo {0} prise".format(fileName))
                 except Exception, e:
-                    print("Error on capture.") + e
+                    logger.warning("Error on capture." + e)
                     print("Retrying...")
                     continue
 
@@ -89,14 +115,14 @@ def main():
                                                        file.extFile)))
                 # Deplace/rennome la photo
                 file = file.move(newPathFile)
-                print("Fichier '{0}' transferer vers '{1}'"
+                logger.info("Fichier '{0}' transferer vers '{1}'"
                       .format(file.nameFile, file.parenPathFile))
 
                 # Calcul du temps d'execution du script
                 timeScriptShot = time.time()-timeScriptShot
                 print("")
                 print("--------------------------")
-                print("Temps Total: {0}".format(timeScriptShot))
+                logger.info("Temps Total: {0}".format(timeScriptShot))
                 print("--------------------------")
                 print("")
 
@@ -104,7 +130,7 @@ def main():
                 if timeScriptShot < INTER_SHOT_DELAY_SEC:
                     sleep(INTER_SHOT_DELAY_SEC-timeScriptShot)
 
-    print("Le TimeLaps est termine")
+    logger.info("Le TimeLaps est termine")
 
 if __name__ == "__main__":
     main()
